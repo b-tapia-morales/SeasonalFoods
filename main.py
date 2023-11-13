@@ -21,7 +21,7 @@ async def say_hello(name: str):
 
 @app.on_event("startup")
 def startup_db_client():
-    app.mongodb_client = MongoClient('localhost', 27017)
+    app.mongodb_client = MongoClient(config["ADRESS"], 27017)
     app.database = app.mongodb_client[config["DB_NAME"]]
 
 
@@ -30,4 +30,4 @@ def shutdown_db_client():
     app.mongodb_client.close()
 
 
-app.include_router(food_router, tags=["foods"], prefix="/foods")
+app.include_router(food_router, tags=["seasonal-foods"], prefix="/seasonal-foods/api/v1")

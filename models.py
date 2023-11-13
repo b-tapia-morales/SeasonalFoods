@@ -29,3 +29,22 @@ class FoodDateAndPrice(BaseModel):
     date: datetime
     mean_price: float
 
+
+class FoodWeekAndPrice(BaseModel):
+    week: int
+    mean_price: float
+
+
+class FoodSummarized(BaseModel):
+    product_name: str
+    group: str
+    region: str
+    price: float
+    point_type: str
+    date: datetime
+
+
+class SeasonalFoodSeries(BaseModel):
+    name: str
+    category: str
+    series: List[FoodWeekAndPrice]
