@@ -4,7 +4,7 @@ from typing import Optional, List
 
 from bson import ObjectId
 from pydantic import BaseModel, Field
-from datetime import datetime
+from datetime import datetime, date
 
 
 class Food(BaseModel):
@@ -26,6 +26,25 @@ class History(BaseModel):
 
 
 class FoodDateAndPrice(BaseModel):
-    date: datetime
+    date: date
     mean_price: float
 
+
+class FoodWeekAndPrice(BaseModel):
+    week: int
+    mean_price: float
+
+
+class FoodSummarized(BaseModel):
+    product_name: str
+    group: str
+    region: str
+    price: float
+    point_type: str
+    date: datetime
+
+
+class SeasonalFoodSeries(BaseModel):
+    name: str
+    category: str
+    series: List[FoodWeekAndPrice]

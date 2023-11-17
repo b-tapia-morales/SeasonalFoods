@@ -13,6 +13,25 @@ class Region(str, Enum):
     LOS_LAGOS = "Región de Los Lagos"
 
 
+class Category(Enum):
+    FRUTAS = "Frutas"
+    HORTALIZAS = "Hortalizas"
+    BOVINA = "Carne bovina"
+    CARNE = "Carne de cerdo, ave y cordero"
+    LACTEOS = "Lácteos, huevos y margarina"
+    PAN = "Pan"
+    ABARROTES = "Abarrotes y otros"
+
+
+class BoughtIn(Enum):
+    CARNICERIA = "Carnicería"
+    PANADERIA = "Panadería"
+    FERIA = "Feria libre"
+    MINORISTA = "Mercado Minorista"
+    MAYORISTA = "Mercado Mayorista"
+    SUPERMERCADO = "Supermercado"
+
+
 region_dict = {
     1: Region.ARICA,
     2: Region.COQUIMBO,
@@ -23,4 +42,32 @@ region_dict = {
     7: Region.BIOBIO,
     8: Region.LA_ARAUCANIA,
     9: Region.LOS_LAGOS
+}
+
+
+category_dict = {
+    1: Category.FRUTAS,
+    2: Category.HORTALIZAS,
+    3: Category.BOVINA,
+    4: Category.CARNE,
+    5: Category.LACTEOS,
+    6: Category.PAN,
+    7: Category.ABARROTES
+}
+
+
+point_dict = {
+    1: BoughtIn.CARNICERIA,
+    2: BoughtIn.PANADERIA,
+    3: BoughtIn.FERIA,
+    4: BoughtIn.MINORISTA,
+    5: BoughtIn.MAYORISTA,
+    6: BoughtIn.SUPERMERCADO,
+}
+
+
+quality_dict = {
+    0: ' ',
+    1: 'Primera',
+    2: 'Segunda'
 }

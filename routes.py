@@ -1,11 +1,11 @@
-from datetime import datetime, timezone, date
+from datetime import datetime, timezone, date, timedelta
 
 from fastapi import APIRouter, Body, Request, Response, HTTPException, status, Query
 from fastapi.encoders import jsonable_encoder
 from typing import List, Annotated
 
 import models
-from models import Food, History, FoodDateAndPrice
+from models import Food, FoodDateAndPrice, SeasonalFoodSeries
 import enums
 
 router = APIRouter()
@@ -25,73 +25,245 @@ def get_food(request: Request, product_name: str):
     raise HTTPException(status_code=404)
 
 
-@router.get("/history/region/{user_region}/product/{product_name}/date",
-            response_description="get food's history",
+@router.get("/product/{product_name}/quality/{quality_val}/region/{region_id}",
+            response_description="Product's price history from the last 4 weeks.",
             response_model=List[FoodDateAndPrice])
-def get_food_history(request: Request, user_region: int,
-                     product_name: str,
-                     date_from: Annotated[str, Query(alias="gte")],
-                     date_to: Annotated[str, Query(alias="lte")]):
+def get_food_history_last_weeks(request: Request,
+                                region_id: int,
+                                product_name: str,
+                                quality_val: int):
+    curr_date = datetime.today()
+
     pipeline = [
         {
             '$match': {
-                'product_name': product_name
+                'date': {
+                    '$gte': (curr_date - timedelta(weeks=4)).replace(
+                        hour=0,
+                        minute=0,
+                        second=0,
+                        microsecond=0
+                    )
+                }
+            }
+        }, {
+            '$match': {
+                'region': enums.region_dict[region_id].value,
+                'quality': enums.quality_dict[quality_val],
             }
         }, {
             '$lookup': {
-                'from': 'history',
-                'localField': '_id',
-                'foreignField': 'food_id',
-                'as': 'price'
+                'from': 'foods',
+                'localField': 'food_id',
+                'foreignField': '_id',
+                'as': 'food'
             }
         }, {
             '$unwind': {
-                'path': '$price',
+                'path': '$food',
                 'preserveNullAndEmptyArrays': False
             }
         }, {
             '$match': {
-                'price.region': enums.region_dict[user_region].value
+                'food.product_name': product_name
             }
         }, {
             '$project': {
-                'date': '$price.date',
-                'mean_price': '$price.mean_price'
-            }
-        }, {
-            '$sort': {
-                'date': -1
+                'date': '$date',
+                'mean_price': '$mean_price',
             }
         }
     ]
 
-    if date_from is not None:
-        pipeline.append({
-            '$match': {
-                'date': {
-                    '$gte': datetime.strptime(date_from, '%Y-%m-%d'),
-                }
-            }
-        })
-
-    if date_to is not None:
-        pipeline.append({
-            '$match': {
-                'date': {
-                    '$lte': datetime.strptime(date_to, '%Y-%m-%d')
-                }
-            }
-        })
     print(pipeline)
-    result = request.app.database['foods'].aggregate(pipeline)
+    result = request.app.database['history'].aggregate(pipeline)
 
     if result is not None:
         return list(result)
     raise HTTPException(status_code=404)
 
 
-"""@router.get("/history/region/{user_region}/product/{product_name}/",
-            response_description="get food's history",
-            response_model=List[FoodDateAndPrice])
-def get_food_history_current_month(request: Request, user_region: int, product_name: str):
-"""
+@router.get(
+    "/product/{product_name}/quality/{quality_val}/region/{region_id}/store_type/{store_type_id}/year/{year_val}/week",
+    response_description="Product's price history using weeks from a certain year.",
+    response_model=List[FoodDateAndPrice])
+def get_food_history_week_range(request: Request,
+                                product_name: str,
+                                quality_val: int,
+                                region_id: int,
+                                store_type_id: int,
+                                year_val: int,
+                                week_from: Annotated[int, Query(alias="gte")],
+                                week_to: Annotated[int, Query(alias="lte")]):
+    dt_lower = date.fromisocalendar(year_val, week_from, 1)
+    dt_upper = date.fromisocalendar(year_val, week_to, 1)
+
+    pipeline = [
+        {
+            '$match': {
+                'date': {
+                    '$gte': datetime.combine(dt_lower, datetime.min.time()),
+                    '$lte': datetime.combine(dt_upper, datetime.min.time())
+                }
+            }
+        }, {
+            '$match': {
+                'region': enums.region_dict[region_id].value,
+                'quality': enums.quality_dict[quality_val],
+                'point_type': enums.point_dict[store_type_id].value
+            }
+        }, {
+            '$lookup': {
+                'from': 'foods',
+                'localField': 'food_id',
+                'foreignField': '_id',
+                'as': 'food'
+            }
+        }, {
+            '$unwind': {
+                'path': '$food',
+                'preserveNullAndEmptyArrays': False
+            }
+        }, {
+            '$match': {
+                'food.product_name': product_name
+            }
+        }, {
+            '$project': {
+                'date': '$date',
+                'mean_price': '$mean_price',
+            }
+        }
+    ]
+
+    print(pipeline)
+    result = request.app.database['history'].aggregate(pipeline)
+
+    if result is not None:
+        return list(result)
+    raise HTTPException(status_code=404)
+
+
+@router.get(
+    "/product/{product_name}/quality/{quality_val}/region/{region_id}/store_type/{store_type_id}/date",
+    response_description="Product's price history using dates.",
+    response_model=List[FoodDateAndPrice])
+def get_food_history_date_range(request: Request,
+                                product_name: str,
+                                quality_val: int,
+                                region_id: int,
+                                store_type_id: int,
+                                date_from: Annotated[str, Query(alias="gte")],
+                                date_to: Annotated[str, Query(alias="lte")]):
+    pipeline = [
+        {
+            '$match': {
+                'date': {
+                    '$gte': datetime.strptime(date_from, '%Y-%m-%d'),
+                    '$lte': datetime.strptime(date_to, '%Y-%m-%d')
+                }
+            }
+        }, {
+            '$match': {
+                'region': enums.region_dict[region_id].value,
+                'quality': enums.quality_dict[quality_val],
+                'point_type': enums.point_dict[store_type_id].value
+            }
+        }, {
+            '$lookup': {
+                'from': 'foods',
+                'localField': 'food_id',
+                'foreignField': '_id',
+                'as': 'food'
+            }
+        }, {
+            '$unwind': {
+                'path': '$food',
+                'preserveNullAndEmptyArrays': False
+            }
+        }, {
+            '$match': {
+                'food.product_name': product_name
+            }
+        }, {
+            '$project': {
+                'date': '$date',
+                'mean_price': '$mean_price',
+            }
+        }
+    ]
+
+    print(pipeline)
+    result = request.app.database['history'].aggregate(pipeline)
+
+    if result is not None:
+        return list(result)
+    raise HTTPException(status_code=404)
+
+
+# you probably shouldn't use this right now.
+@router.get(
+    "/seasonal/month/{month_val}/region/{region_id}",
+    response_description="Foods that are in season.",
+    response_model=List[SeasonalFoodSeries])
+def get_foods_in_season(request: Request,
+                        month_val: int,
+                        region_id: int):
+    current_date = datetime.today()
+    date_lower = datetime(current_date.year, month_val, 1, 0, 0, 0)
+    date_upper = datetime(current_date.year, month_val + 1, 1, 0, 0, 0) - timedelta(days=1)
+
+    pipeline = [
+        {
+            '$match': {
+                'date': {
+                    '$gte': date_lower,
+                    '$lte': date_upper
+                }
+            }
+        }, {
+            '$match': {
+                'region': enums.region_dict[region_id].value
+            }
+        }, {
+            '$lookup': {
+                'from': 'foods',
+                'localField': 'food_id',
+                'foreignField': '_id',
+                'as': 'food'
+            }
+        }, {
+            '$unwind': {
+                'path': '$food',
+                'preserveNullAndEmptyArrays': False
+            }
+        }, {
+            '$group': {
+                '_id': {
+                    'name': '$food.product_name',
+                    'group': '$food.group'
+                },
+                'series': {
+                    '$push': {
+                        'week': {
+                            '$week': '$date'
+                        },
+                        'mean_price': '$mean_price'
+                    }
+                }
+            }
+        }, {
+            '$project': {
+                '_id': 0,
+                'name': '$_id.name',
+                'category': '$_id.group',
+                'series': '$series'
+            }
+        }
+    ]
+    print(pipeline)
+    result = request.app.database['history'].aggregate(pipeline)
+
+    if result is not None:
+        return list(result)
+    raise HTTPException(status_code=404)
