@@ -4,7 +4,7 @@ from typing import Optional, List
 
 from bson import ObjectId
 from pydantic import BaseModel, Field
-from datetime import datetime
+from datetime import datetime, date
 
 
 class Food(BaseModel):
@@ -26,7 +26,7 @@ class History(BaseModel):
 
 
 class FoodDateAndPrice(BaseModel):
-    date: datetime
+    date: date
     mean_price: float
 
 

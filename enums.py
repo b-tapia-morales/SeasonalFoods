@@ -67,6 +67,7 @@ point_dict = {
 
 
 quality_dict = {
+    0: ' ',
     1: 'Primera',
     2: 'Segunda'
 }
