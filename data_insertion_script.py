@@ -13,7 +13,7 @@ def handle_quality(row_value: str):
         return 'Segunda'
 
 
-def begin(data_route, delimiter='|'):
+def begin(data_route, delimiter='|', batch_size=2000):
     client = MongoClient(config["ADRESS"], 27017)
     db = client[config["DB_NAME"]]
 
@@ -36,10 +36,12 @@ def begin(data_route, delimiter='|'):
         })
 
     curr_idx = 0
-    data_len = len(data.index)
+    history_documents = []
+
     for i, row in data.iterrows():
         food_doc = db['foods'].find_one({'product_name': row['Producto']})
-        db['history'].insert_one({
+
+        history_documents.append({
             'date': datetime.datetime.strptime(str(row['Fecha']), '%d/%m/%Y %H:%M:%S'),
             'region': row['Region'],
             'sector': row['Sector'],
@@ -52,8 +54,16 @@ def begin(data_route, delimiter='|'):
             'max_price': row['PrecioMaximo'],
             'food_id': food_doc.get('_id')
         })
+
         curr_idx += 1
-        print(f'{curr_idx} row/s out of {data_len}')
+
+        if curr_idx % batch_size == 0 and curr_idx != 0:
+            db['history'].insert_many(history_documents)
+            history_documents = []
+
+    # Insert remaining documents
+    if history_documents:
+        db['history'].insert_many(history_documents)
 
 
 if __name__ == '__main__':
