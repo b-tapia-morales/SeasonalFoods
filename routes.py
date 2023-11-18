@@ -241,13 +241,24 @@ def get_foods_in_season(request: Request,
             '$group': {
                 '_id': {
                     'name': '$food.product_name',
-                    'group': '$food.group'
+                    'group': '$food.group',
+                    'week': {
+                        '$week': '$date'
+                    }
+                },
+                'mean_price': {
+                    '$avg': '$mean_price'
+                }
+            }
+        }, {
+            '$group': {
+                '_id': {
+                    'name': '$_id.name',
+                    'category': '$_id.group'
                 },
                 'series': {
                     '$push': {
-                        'week': {
-                            '$week': '$date'
-                        },
+                        'week': '$_id.week',
                         'mean_price': '$mean_price'
                     }
                 }
@@ -256,7 +267,7 @@ def get_foods_in_season(request: Request,
             '$project': {
                 '_id': 0,
                 'name': '$_id.name',
-                'category': '$_id.group',
+                'category': '$_id.category',
                 'series': '$series'
             }
         }
@@ -265,5 +276,8 @@ def get_foods_in_season(request: Request,
     result = request.app.database['history'].aggregate(pipeline)
 
     if result is not None:
-        return list(result)
+        result = list(result)
+        for item in result:
+            item['series'] = sorted(item['series'], key=lambda x: x['week'])
+        return result
     raise HTTPException(status_code=404)
