@@ -1,5 +1,4 @@
 from fastapi import FastAPI
-import uvicorn
 from dotenv import dotenv_values
 from pymongo import MongoClient
 from routes import router as food_router
@@ -21,7 +20,7 @@ async def say_hello(name: str):
 
 @app.on_event("startup")
 def startup_db_client():
-    app.mongodb_client = MongoClient(config["ADRESS"], 27017)
+    app.mongodb_client = MongoClient(config["ADDRESS"], 27017)
     app.database = app.mongodb_client[config["DB_NAME"]]
 
 

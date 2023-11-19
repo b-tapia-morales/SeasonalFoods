@@ -3,6 +3,8 @@ from pymongo import MongoClient
 import pandas as pd
 import datetime
 
+from enums import region_zone_dict, Region
+
 config = dotenv_values(".env")
 
 
@@ -14,7 +16,7 @@ def handle_quality(row_value: str):
 
 
 def begin(data_route, delimiter='|', batch_size=2000):
-    client = MongoClient(config["ADRESS"], 27017)
+    client = MongoClient(config["ADDRESS"], 27017)
     db = client[config["DB_NAME"]]
 
     data = pd.read_csv(data_route, delimiter=delimiter)
@@ -44,6 +46,7 @@ def begin(data_route, delimiter='|', batch_size=2000):
         history_documents.append({
             'date': datetime.datetime.strptime(str(row['Fecha']), '%d/%m/%Y %H:%M:%S'),
             'region': row['Region'],
+            'zone': region_zone_dict[row['Region']],
             'sector': row['Sector'],
             'point_type': row['Tipo_de_punto'],
             'variety': row['Variedad'],

@@ -1,7 +1,8 @@
 from enum import Enum
+from typing import Dict
 
 
-class Region(str, Enum):
+class Region(Enum):
     ARICA = "Región de Arica y Parinacota"
     COQUIMBO = "Región de Coquimbo"
     VALPARAISO = "Región de Valparaíso"
@@ -11,6 +12,12 @@ class Region(str, Enum):
     BIOBIO = "Región del Biobío"
     LA_ARAUCANIA = "Región de La Araucanía"
     LOS_LAGOS = "Región de Los Lagos"
+
+
+class Zone(Enum):
+    NORTE = "Zona norte"
+    CENTRO = "Zona centro"
+    SUR = "Zona sur"
 
 
 class Category(Enum):
@@ -30,6 +37,19 @@ class BoughtIn(Enum):
     MINORISTA = "Mercado Minorista"
     MAYORISTA = "Mercado Mayorista"
     SUPERMERCADO = "Supermercado"
+
+
+region_zone_dict: dict[str, str] = {
+    "Región de Arica y Parinacota": "Zona norte",
+    "Región de Coquimbo": "Zona centro",
+    "Región de Valparaíso": "Zona centro",
+    "Región Metropolitana de Santiago": "Zona centro",
+    "Región del Maule": "Zona centro",
+    "Región de Ñuble": "Zona centro",
+    "Región del Biobío": "Zona centro",
+    "Región de La Araucanía": "Zona sur",
+    "Región de Los Lagos": "Zona sur",
+}
 
 
 region_dict = {
