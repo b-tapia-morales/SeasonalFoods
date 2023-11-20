@@ -12,6 +12,10 @@ class Food(BaseModel):
     group: str
 
 
+class HarvestFoods(BaseModel):
+    foods: List[str]
+
+
 class History(BaseModel):
     date: datetime
     region: str
