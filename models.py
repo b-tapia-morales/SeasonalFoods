@@ -15,6 +15,7 @@ class Food(BaseModel):
 class History(BaseModel):
     date: datetime
     week: int
+    year: int
     region: str
     sector: str
     point_type: str
