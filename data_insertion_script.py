@@ -45,6 +45,8 @@ def begin(data_route, delimiter='|', batch_size=2000):
 
         history_documents.append({
             'date': datetime.datetime.strptime(str(row['Fecha']), '%d/%m/%Y %H:%M:%S'),
+            'year': row['Anio'],
+            'week': row['Semana'],
             'region': row['Region'],
             'zone': region_zone_dict[row['Region']],
             'sector': row['Sector'],

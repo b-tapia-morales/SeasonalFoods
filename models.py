@@ -14,6 +14,7 @@ class Food(BaseModel):
 
 class History(BaseModel):
     date: datetime
+    week: int
     region: str
     sector: str
     point_type: str
@@ -27,6 +28,7 @@ class History(BaseModel):
 
 class FoodDateAndPrice(BaseModel):
     date: date
+    week: int
     mean_price: float
 
 
