@@ -131,6 +131,7 @@ def get_food_history_week_range(request: Request,
         }, {
             '$project': {
                 'date': '$date',
+                'week': '$week',
                 'mean_price': '$mean_price',
             }
         }
@@ -188,6 +189,7 @@ def get_food_history_date_range(request: Request,
         }, {
             '$project': {
                 'date': '$date',
+                'week': '$week',
                 'mean_price': '$mean_price',
             }
         }
