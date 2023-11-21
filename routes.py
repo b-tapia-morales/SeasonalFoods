@@ -5,7 +5,7 @@ from fastapi.encoders import jsonable_encoder
 from typing import List, Annotated
 
 import models
-from models import Food, FoodDateAndPrice, SeasonalFoodSeries
+from models import Food, FoodDateAndPrice, SeasonalFoodSeries, HarvestFoods
 import enums
 
 router = APIRouter()
@@ -131,6 +131,7 @@ def get_food_history_week_range(request: Request,
         }, {
             '$project': {
                 'date': '$date',
+                'week': '$week',
                 'mean_price': '$mean_price',
             }
         }
@@ -188,6 +189,7 @@ def get_food_history_date_range(request: Request,
         }, {
             '$project': {
                 'date': '$date',
+                'week': '$week',
                 'mean_price': '$mean_price',
             }
         }
@@ -244,7 +246,8 @@ def get_foods_in_season(request: Request,
                     'group': '$food.group',
                     'week': {
                         '$week': '$date'
-                    }
+                    },
+                    'date': '$date'
                 },
                 'mean_price': {
                     '$avg': '$mean_price'
@@ -259,6 +262,7 @@ def get_foods_in_season(request: Request,
                 'series': {
                     '$push': {
                         'week': '$_id.week',
+                        'date': '$_id.date',
                         'mean_price': '$mean_price'
                     }
                 }
@@ -281,3 +285,56 @@ def get_foods_in_season(request: Request,
             item['series'] = sorted(item['series'], key=lambda x: x['week'])
         return result
     raise HTTPException(status_code=404)
+
+
+@router.get(
+    "/seasonal/zone/{zone_id}/harvest_months",
+    response_description="Foods in a certain zone and/or during harvest.",
+    response_model=HarvestFoods)
+def get_foods_in_zone(request: Request,
+                      zone: enums.Zone,
+                      harvest_months: int):
+    pipeline = [
+        {
+            '$match': {
+                'zone': zone.value
+            }
+        }, {
+            '$lookup': {
+                'from': 'foods',
+                'localField': 'ingredient_id',
+                'foreignField': '_id',
+                'as': 'food'
+            }
+        }, {
+            '$unwind': {
+                'path': '$food',
+                'preserveNullAndEmptyArrays': False
+            }
+        }, {
+            '$match': {
+                'harvest_months': harvest_months
+            }
+        }, {
+            '$group': {
+                '_id': None,
+                'names': {
+                    '$push': '$food.product_name'
+                }
+            }
+        }, {
+            '$project': {
+                '_id': 0,
+                'foods': '$names'
+            }
+        }
+    ]
+
+    print(pipeline)
+    result = request.app.database['harvest'].aggregate(pipeline)
+
+    if result is not None:
+        result = list(result)
+        return result[0]
+    raise HTTPException(status_code=404)
+
