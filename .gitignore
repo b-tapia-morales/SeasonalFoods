@@ -916,3 +916,4 @@ cython_debug/
 *_LOCAL_*.txt
 *_REMOTE_*.txt
 
+csv/precios_consumidor_semana.csv
