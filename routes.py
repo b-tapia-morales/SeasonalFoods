@@ -200,7 +200,6 @@ def get_food_history_date_range(request: Request,
     raise HTTPException(status_code=404)
 
 
-# you probably shouldn't use this right now.
 @router.get(
     "/seasonal/month/{month_val}/region/{region_id}",
     response_description="Foods that are in season.",
@@ -286,7 +285,7 @@ def get_foods_in_season(request: Request,
 
 @router.get(
     "/seasonal/zone/{zone_id}/harvest_months",
-    response_description="Foods in a certain zone and/or during harvest.",
+    response_description="Foods in a certain zone and during harvest.",
     response_model=HarvestFoods)
 def get_foods_in_zone(request: Request,
                       zone: enums.Zone,
@@ -300,7 +299,7 @@ def get_foods_in_zone(request: Request,
             '$lookup': {
                 'from': 'foods',
                 'localField': 'ingredient_id',
-                'foreignField': '_id',
+                'foreignField': 'product_name',
                 'as': 'food'
             }
         }, {

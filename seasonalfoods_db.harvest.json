@@ -1,0 +1,1071 @@
+[{
+  "_id": {
+    "$oid": "655bb6cb2c8a4bf6fc42f982"
+  },
+  "ingredient_id": "Zapallo",
+  "zone": "Zona Norte",
+  "harvest_months": [
+    12
+  ]
+},
+{
+  "_id": {
+    "$oid": "655bb7f1d3e16b3152be71fa"
+  },
+  "ingredient_id": "Zapallo",
+  "zone": "Zona Centro",
+  "harvest_months": [
+    3,
+    4
+  ]
+},
+{
+  "_id": {
+    "$oid": "655bb814d3e16b3152be71fb"
+  },
+  "ingredient_id": "Zapallo",
+  "zone": "Zona Sur",
+  "harvest_months": [
+    9
+  ]
+},
+{
+  "_id": {
+    "$oid": "655bb85dd3e16b3152be71fc"
+  },
+  "ingredient_id": "Lechuga",
+  "zone": "Zona Norte",
+  "harvest_months": [
+    6,
+    9,
+    10
+  ]
+},
+{
+  "_id": {
+    "$oid": "655bb875d3e16b3152be71fd"
+  },
+  "ingredient_id": "Lechuga",
+  "zone": "Zona Centro",
+  "harvest_months": [
+    2,
+    3
+  ]
+},
+{
+  "_id": {
+    "$oid": "655bb884d3e16b3152be71fe"
+  },
+  "ingredient_id": "Lechuga",
+  "zone": "Zona Sur",
+  "harvest_months": [
+    12
+  ]
+},
+{
+  "_id": {
+    "$oid": "655bb8bad3e16b3152be71ff"
+  },
+  "ingredient_id": "Choclo",
+  "zone": "Zona Norte",
+  "harvest_months": [
+    1,
+    8,
+    9
+  ]
+},
+{
+  "_id": {
+    "$oid": "655bb8efd3e16b3152be7200"
+  },
+  "ingredient_id": "Choclo",
+  "zone": "Zona Centro",
+  "harvest_months": [
+    1
+  ]
+},
+{
+  "_id": {
+    "$oid": "655bb904d3e16b3152be7201"
+  },
+  "ingredient_id": "Choclo",
+  "zone": "Zona Sur",
+  "harvest_months": [
+    2
+  ]
+},
+{
+  "_id": {
+    "$oid": "655bb96ed3e16b3152be7203"
+  },
+  "ingredient_id": "Tomate",
+  "zone": "Zona Norte",
+  "harvest_months": [
+    1,
+    2,
+    6,
+    7,
+    8,
+    9,
+    10,
+    11,
+    12
+  ]
+},
+{
+  "_id": {
+    "$oid": "655bb9c6d3e16b3152be7204"
+  },
+  "ingredient_id": "Tomate",
+  "zone": "Zona Centro",
+  "harvest_months": [
+    1,
+    2,
+    10,
+    11,
+    12
+  ]
+},
+{
+  "_id": {
+    "$oid": "655bba02d3e16b3152be7205"
+  },
+  "ingredient_id": "Tomate",
+  "zone": "Zona Sur",
+  "harvest_months": [
+    1,
+    2
+  ]
+},
+{
+  "_id": {
+    "$oid": "655bba38d3e16b3152be7206"
+  },
+  "ingredient_id": "Zanahoria",
+  "zone": "Zona Norte",
+  "harvest_months": [
+    7,
+    8
+  ]
+},
+{
+  "_id": {
+    "$oid": "655bba5dd3e16b3152be7207"
+  },
+  "ingredient_id": "Zanahoria",
+  "zone": "Zona Centro",
+  "harvest_months": [
+    4,
+    5,
+    6,
+    7,
+    8,
+    9
+  ]
+},
+{
+  "_id": {
+    "$oid": "655bba7bd3e16b3152be7208"
+  },
+  "ingredient_id": "Zanahoria",
+  "zone": "Zona Sur",
+  "harvest_months": [
+    1,
+    2,
+    12
+  ]
+},
+{
+  "_id": {
+    "$oid": "655bbaa9d3e16b3152be7209"
+  },
+  "ingredient_id": "Repollo",
+  "zone": "Zona Norte",
+  "harvest_months": [
+    8,
+    9,
+    10
+  ]
+},
+{
+  "_id": {
+    "$oid": "655bbad7d3e16b3152be720a"
+  },
+  "ingredient_id": "Repollo",
+  "zone": "Zona Centro",
+  "harvest_months": [
+    5,
+    6
+  ]
+},
+{
+  "_id": {
+    "$oid": "655bbaebd3e16b3152be720b"
+  },
+  "ingredient_id": "Repollo",
+  "zone": "Zona Sur",
+  "harvest_months": [
+    2
+  ]
+},
+{
+  "_id": {
+    "$oid": "655bbb3ed3e16b3152be720c"
+  },
+  "ingredient_id": "Alcachofa",
+  "zone": "Zona Norte",
+  "harvest_months": [
+    8,
+    9,
+    10,
+    11,
+    12
+  ]
+},
+{
+  "_id": {
+    "$oid": "655bbb4fd3e16b3152be720d"
+  },
+  "ingredient_id": "Alcachofa",
+  "zone": "Zona Centro",
+  "harvest_months": [
+    7,
+    8,
+    9,
+    10,
+    11,
+    12
+  ]
+},
+{
+  "_id": {
+    "$oid": "655bbbe2d3e16b3152be720e"
+  },
+  "ingredient_id": "Cebolla",
+  "zone": "Zona Norte",
+  "harvest_months": [
+    2,
+    3,
+    9,
+    10
+  ]
+},
+{
+  "_id": {
+    "$oid": "655bbc02d3e16b3152be720f"
+  },
+  "ingredient_id": "Cebolla",
+  "zone": "Zona Centro",
+  "harvest_months": [
+    2,
+    3,
+    10,
+    11,
+    12
+  ]
+},
+{
+  "_id": {
+    "$oid": "655bbc16d3e16b3152be7210"
+  },
+  "ingredient_id": "Cebolla",
+  "zone": "Zona Sur",
+  "harvest_months": [
+    1,
+    2,
+    3,
+    10,
+    11,
+    12
+  ]
+},
+{
+  "_id": {
+    "$oid": "655bbc65d3e16b3152be7211"
+  },
+  "ingredient_id": "Brócoli",
+  "zone": "Zona Norte",
+  "harvest_months": [
+    4,
+    8,
+    9
+  ]
+},
+{
+  "_id": {
+    "$oid": "655bbc81d3e16b3152be7212"
+  },
+  "ingredient_id": "Brócoli",
+  "zone": "Zona Centro",
+  "harvest_months": [
+    8
+  ]
+},
+{
+  "_id": {
+    "$oid": "655bc5a9d3e16b3152be7213"
+  },
+  "ingredient_id": "Poroto verde",
+  "zone": "Zona Norte",
+  "harvest_months": [
+    3,
+    9
+  ]
+},
+{
+  "_id": {
+    "$oid": "655bc5d3d3e16b3152be7214"
+  },
+  "ingredient_id": "Poroto verde",
+  "zone": "Zona Sur",
+  "harvest_months": [
+    10,
+    11,
+    12
+  ]
+},
+{
+  "_id": {
+    "$oid": "655bc75bd3e16b3152be7215"
+  },
+  "ingredient_id": "Coliflor",
+  "zone": "Zona Norte",
+  "harvest_months": [
+    8,
+    9
+  ]
+},
+{
+  "_id": {
+    "$oid": "655bc773d3e16b3152be7216"
+  },
+  "ingredient_id": "Coliflor",
+  "zone": "Zona Centro",
+  "harvest_months": [
+    12
+  ]
+},
+{
+  "_id": {
+    "$oid": "655bc78bd3e16b3152be7217"
+  },
+  "ingredient_id": "Coliflor",
+  "zone": "Zona Sur",
+  "harvest_months": [
+    3,
+    4
+  ]
+},
+{
+  "_id": {
+    "$oid": "655bc89cd3e16b3152be721a"
+  },
+  "ingredient_id": "Pimiento",
+  "zone": "Zona Norte",
+  "harvest_months": [
+    9,
+    10
+  ]
+},
+{
+  "_id": {
+    "$oid": "655bc8aed3e16b3152be721b"
+  },
+  "ingredient_id": "Pimiento",
+  "zone": "Zona Centro",
+  "harvest_months": [
+    2,
+    3
+  ]
+},
+{
+  "_id": {
+    "$oid": "655bc8f6d3e16b3152be721c"
+  },
+  "ingredient_id": "Haba",
+  "zone": "Zona Norte",
+  "harvest_months": [
+    3,
+    4,
+    10
+  ]
+},
+{
+  "_id": {
+    "$oid": "655bc90bd3e16b3152be721d"
+  },
+  "ingredient_id": "Haba",
+  "zone": "Zona Centro",
+  "harvest_months": [
+    9
+  ]
+},
+{
+  "_id": {
+    "$oid": "655bc91ed3e16b3152be721e"
+  },
+  "ingredient_id": "Haba",
+  "zone": "Zona Sur",
+  "harvest_months": [
+    1
+  ]
+},
+{
+  "_id": {
+    "$oid": "655bc951d3e16b3152be721f"
+  },
+  "ingredient_id": "Zapallo italiano",
+  "zone": "Zona Norte",
+  "harvest_months": [
+    1,
+    9,
+    10,
+    12
+  ]
+},
+{
+  "_id": {
+    "$oid": "655bc966d3e16b3152be7220"
+  },
+  "ingredient_id": "Zapallo italiano",
+  "zone": "Zona Centro",
+  "harvest_months": [
+    1,
+    12
+  ]
+},
+{
+  "_id": {
+    "$oid": "655bc973d3e16b3152be7221"
+  },
+  "ingredient_id": "Zapallo italiano",
+  "zone": "Zona Sur",
+  "harvest_months": [
+    10,
+    11
+  ]
+},
+{
+  "_id": {
+    "$oid": "655bca33d3e16b3152be7222"
+  },
+  "ingredient_id": "Apio",
+  "zone": "Zona Norte",
+  "harvest_months": [
+    8
+  ]
+},
+{
+  "_id": {
+    "$oid": "655bcb3cd3e16b3152be7226"
+  },
+  "ingredient_id": "Arveja Verde",
+  "zone": "Zona Norte",
+  "harvest_months": [
+    2,
+    3
+  ]
+},
+{
+  "_id": {
+    "$oid": "655bcb68d3e16b3152be7227"
+  },
+  "ingredient_id": "Arveja Verde",
+  "zone": "Zona Sur",
+  "harvest_months": [
+    10,
+    11
+  ]
+},
+{
+  "_id": {
+    "$oid": "655bcb9cd3e16b3152be7228"
+  },
+  "ingredient_id": "Pepino ensalada",
+  "zone": "Zona Norte",
+  "harvest_months": [
+    9,
+    10
+  ]
+},
+{
+  "_id": {
+    "$oid": "655bcbbfd3e16b3152be7229"
+  },
+  "ingredient_id": "Pepino ensalada",
+  "zone": "Zona Centro",
+  "harvest_months": [
+    1,
+    2,
+    12
+  ]
+},
+{
+  "_id": {
+    "$oid": "655bcc34d3e16b3152be722a"
+  },
+  "ingredient_id": "Apio",
+  "zone": "Zona Centro",
+  "harvest_months": [
+    5,
+    6
+  ]
+},
+{
+  "_id": {
+    "$oid": "655bcc94d3e16b3152be722b"
+  },
+  "ingredient_id": "Sandía",
+  "zone": "Zona Norte",
+  "harvest_months": [
+    1,
+    2,
+    3
+  ]
+},
+{
+  "_id": {
+    "$oid": "655bcca4d3e16b3152be722c"
+  },
+  "ingredient_id": "Sandía",
+  "zone": "Zona Centro",
+  "harvest_months": [
+    1,
+    12
+  ]
+},
+{
+  "_id": {
+    "$oid": "655bccd5d3e16b3152be722d"
+  },
+  "ingredient_id": "Espinaca",
+  "zone": "Zona Centro",
+  "harvest_months": [
+    11
+  ]
+},
+{
+  "_id": {
+    "$oid": "655bcce8d3e16b3152be722e"
+  },
+  "ingredient_id": "Espinaca",
+  "zone": "Zona Sur",
+  "harvest_months": [
+    10,
+    11
+  ]
+},
+{
+  "_id": {
+    "$oid": "655bcd47d3e16b3152be722f"
+  },
+  "ingredient_id": "Sandía",
+  "zone": "Zona Sur",
+  "harvest_months": [
+    2
+  ]
+},
+{
+  "_id": {
+    "$oid": "655bcdb9d3e16b3152be7231"
+  },
+  "ingredient_id": "Ajo",
+  "zone": "Zona Norte",
+  "harvest_months": [
+    11
+  ]
+},
+{
+  "_id": {
+    "$oid": "655bcddad3e16b3152be7232"
+  },
+  "ingredient_id": "Ajo",
+  "zone": "Zona Sur",
+  "harvest_months": [
+    1,
+    2
+  ]
+},
+{
+  "_id": {
+    "$oid": "655bce10d3e16b3152be7233"
+  },
+  "ingredient_id": "Espárragos",
+  "zone": "Zona Centro",
+  "harvest_months": [
+    5,
+    9,
+    10
+  ]
+},
+{
+  "_id": {
+    "$oid": "655bce42d3e16b3152be7234"
+  },
+  "ingredient_id": "Melón",
+  "zone": "Zona Centro",
+  "harvest_months": [
+    1,
+    2,
+    12
+  ]
+},
+{
+  "_id": {
+    "$oid": "655bce4dd3e16b3152be7235"
+  },
+  "ingredient_id": "Melón",
+  "zone": "Zona Sur",
+  "harvest_months": [
+    1,
+    2
+  ]
+},
+{
+  "_id": {
+    "$oid": "655bcf11d3e16b3152be7237"
+  },
+  "ingredient_id": "Papa",
+  "zone": "Zona Norte",
+  "harvest_months": [
+    1,
+    2,
+    3,
+    4,
+    11
+  ]
+},
+{
+  "_id": {
+    "$oid": "655bcf20d3e16b3152be7238"
+  },
+  "ingredient_id": "Papa",
+  "zone": "Zona Centro",
+  "harvest_months": [
+    1,
+    2,
+    3
+  ]
+},
+{
+  "_id": {
+    "$oid": "655bcf33d3e16b3152be7239"
+  },
+  "ingredient_id": "Papa",
+  "zone": "Zona Sur",
+  "harvest_months": [
+    3,
+    4
+  ]
+},
+{
+  "_id": {
+    "$oid": "655bcfe5d3e16b3152be723a"
+  },
+  "ingredient_id": "Poroto Tórtola",
+  "zone": "Zona Norte",
+  "harvest_months": [
+    1,
+    2
+  ]
+},
+{
+  "_id": {
+    "$oid": "655bcffed3e16b3152be723b"
+  },
+  "ingredient_id": "Poroto Tórtola",
+  "zone": "Zona Centro",
+  "harvest_months": [
+    6
+  ]
+},
+{
+  "_id": {
+    "$oid": "655bd011d3e16b3152be723c"
+  },
+  "ingredient_id": "Poroto Tórtola",
+  "zone": "Zona Sur",
+  "harvest_months": [
+    3,
+    4
+  ]
+},
+{
+  "_id": {
+    "$oid": "655bd053d3e16b3152be723d"
+  },
+  "ingredient_id": "Lentejas 6 mm",
+  "zone": "Zona Centro",
+  "harvest_months": [
+    2
+  ]
+},
+{
+  "_id": {
+    "$oid": "655bd075d3e16b3152be723e"
+  },
+  "ingredient_id": "Lentejas 6 mm",
+  "zone": "Zona Sur",
+  "harvest_months": [
+    12
+  ]
+},
+{
+  "_id": {
+    "$oid": "655bd0a6d3e16b3152be723f"
+  },
+  "ingredient_id": "Limón",
+  "zone": "Zona Norte",
+  "harvest_months": [
+    1,
+    2,
+    3,
+    4,
+    5,
+    6,
+    7,
+    8,
+    9,
+    10,
+    11,
+    12
+  ]
+},
+{
+  "_id": {
+    "$oid": "655bd0c3d3e16b3152be7240"
+  },
+  "ingredient_id": "Limón",
+  "zone": "Zona Centro",
+  "harvest_months": [
+    2,
+    3,
+    4,
+    5,
+    6,
+    9,
+    10,
+    11,
+    12
+  ]
+},
+{
+  "_id": {
+    "$oid": "655bd131d3e16b3152be7243"
+  },
+  "ingredient_id": "Naranja",
+  "zone": "Zona Norte",
+  "harvest_months": [
+    6,
+    7,
+    8,
+    9,
+    10
+  ]
+},
+{
+  "_id": {
+    "$oid": "655bd17cd3e16b3152be7244"
+  },
+  "ingredient_id": "Mandarina",
+  "zone": "Zona Norte",
+  "harvest_months": [
+    5,
+    6,
+    7,
+    8
+  ]
+},
+{
+  "_id": {
+    "$oid": "655bd232d3e16b3152be7245"
+  },
+  "ingredient_id": "Damasco",
+  "zone": "Zona Norte",
+  "harvest_months": [
+    1,
+    2,
+    3,
+    4,
+    5,
+    8,
+    9,
+    10,
+    11,
+    12
+  ]
+},
+{
+  "_id": {
+    "$oid": "655bd25cd3e16b3152be7246"
+  },
+  "ingredient_id": "Durazno",
+  "zone": "Zona Norte",
+  "harvest_months": [
+    1,
+    2
+  ]
+},
+{
+  "_id": {
+    "$oid": "655bd26dd3e16b3152be7247"
+  },
+  "ingredient_id": "Durazno",
+  "zone": "Zona Centro",
+  "harvest_months": [
+    1,
+    2
+  ]
+},
+{
+  "_id": {
+    "$oid": "655bd293d3e16b3152be7248"
+  },
+  "ingredient_id": "Ciruela",
+  "zone": "Zona Norte",
+  "harvest_months": [
+    2
+  ]
+},
+{
+  "_id": {
+    "$oid": "655bd2a4d3e16b3152be7249"
+  },
+  "ingredient_id": "Ciruela",
+  "zone": "Zona Centro",
+  "harvest_months": [
+    1,
+    2
+  ]
+},
+{
+  "_id": {
+    "$oid": "655bd2e4d3e16b3152be724a"
+  },
+  "ingredient_id": "Cereza",
+  "zone": "Zona Centro",
+  "harvest_months": [
+    12
+  ]
+},
+{
+  "_id": {
+    "$oid": "655bd2f9d3e16b3152be724b"
+  },
+  "ingredient_id": "Cereza",
+  "zone": "Zona Sur",
+  "harvest_months": [
+    1,
+    12
+  ]
+},
+{
+  "_id": {
+    "$oid": "655bd318d3e16b3152be724c"
+  },
+  "ingredient_id": "Manzana",
+  "zone": "Zona Norte",
+  "harvest_months": [
+    4,
+    5
+  ]
+},
+{
+  "_id": {
+    "$oid": "655bd32dd3e16b3152be724d"
+  },
+  "ingredient_id": "Manzana",
+  "zone": "Zona Centro",
+  "harvest_months": [
+    2
+  ]
+},
+{
+  "_id": {
+    "$oid": "655bd339d3e16b3152be724e"
+  },
+  "ingredient_id": "Manzana",
+  "zone": "Zona Sur",
+  "harvest_months": [
+    2,
+    3
+  ]
+},
+{
+  "_id": {
+    "$oid": "655bd36cd3e16b3152be724f"
+  },
+  "ingredient_id": "Pera",
+  "zone": "Zona Centro",
+  "harvest_months": [
+    2
+  ]
+},
+{
+  "_id": {
+    "$oid": "655bd37dd3e16b3152be7250"
+  },
+  "ingredient_id": "Pera",
+  "zone": "Zona Sur",
+  "harvest_months": [
+    2,
+    3
+  ]
+},
+{
+  "_id": {
+    "$oid": "655bda74d3e16b3152be7252"
+  },
+  "ingredient_id": "Aceituna Negra (primera)",
+  "zone": "Zona Norte",
+  "harvest_months": [
+    5,
+    6,
+    7,
+    8
+  ]
+},
+{
+  "_id": {
+    "$oid": "655bdacad3e16b3152be7253"
+  },
+  "ingredient_id": "Palta",
+  "zone": "Zona Norte",
+  "harvest_months": [
+    1,
+    2,
+    3,
+    4,
+    5,
+    6,
+    7,
+    8,
+    10,
+    11,
+    12
+  ]
+},
+{
+  "_id": {
+    "$oid": "655bdaead3e16b3152be7254"
+  },
+  "ingredient_id": "Palta",
+  "zone": "Zona Centro",
+  "harvest_months": [
+    8,
+    9,
+    10,
+    11,
+    12
+  ]
+},
+{
+  "_id": {
+    "$oid": "655bdb0cd3e16b3152be7255"
+  },
+  "ingredient_id": "Mango",
+  "zone": "Zona Norte",
+  "harvest_months": [
+    3,
+    4,
+    5
+  ]
+},
+{
+  "_id": {
+    "$oid": "655bdb27d3e16b3152be7256"
+  },
+  "ingredient_id": "Tuna",
+  "zone": "Zona Norte",
+  "harvest_months": [
+    2,
+    3,
+    4
+  ]
+},
+{
+  "_id": {
+    "$oid": "655bdb5ed3e16b3152be7257"
+  },
+  "ingredient_id": "Uva",
+  "zone": "Zona Norte",
+  "harvest_months": [
+    1,
+    2,
+    11,
+    12
+  ]
+},
+{
+  "_id": {
+    "$oid": "655bdb83d3e16b3152be7258"
+  },
+  "ingredient_id": "Chirimoya",
+  "zone": "Zona Norte",
+  "harvest_months": [
+    7,
+    8,
+    9,
+    10,
+    11
+  ]
+},
+{
+  "_id": {
+    "$oid": "655bdb9ad3e16b3152be7259"
+  },
+  "ingredient_id": "Frutilla",
+  "zone": "Zona Norte",
+  "harvest_months": [
+    1,
+    2,
+    3,
+    4,
+    5,
+    6,
+    7,
+    8,
+    9,
+    10,
+    11,
+    12
+  ]
+},
+{
+  "_id": {
+    "$oid": "655bdbacd3e16b3152be725a"
+  },
+  "ingredient_id": "Frutilla",
+  "zone": "Zona Centro",
+  "harvest_months": [
+    1,
+    2,
+    3,
+    4,
+    9,
+    10,
+    11,
+    12
+  ]
+},
+{
+  "_id": {
+    "$oid": "655bdc37d3e16b3152be725b"
+  },
+  "ingredient_id": "Kiwi",
+  "zone": "Zona Centro",
+  "harvest_months": [
+    4
+  ]
+},
+{
+  "_id": {
+    "$oid": "655bdc4bd3e16b3152be725c"
+  },
+  "ingredient_id": "Kiwi",
+  "zone": "Zona Sur",
+  "harvest_months": [
+    3,
+    4
+  ]
+}]

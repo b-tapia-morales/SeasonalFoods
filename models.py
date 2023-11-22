@@ -54,7 +54,7 @@ class FoodSummarized(BaseModel):
 class SeasonalFoodSeries(BaseModel):
     name: str
     category: str
-    series: List[FoodWeekAndPrice]
+    series: List[FoodDateAndPrice]
 
 
 class MeanPriceInRegion(BaseModel):
