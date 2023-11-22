@@ -5,7 +5,7 @@ from fastapi.encoders import jsonable_encoder
 from typing import List, Annotated
 
 import models
-from models import Food, FoodDateAndPrice, SeasonalFoodSeries, HarvestFoods
+from models import Food, FoodDateAndPrice, SeasonalFoodSeries, HarvestFoods, MeanPriceInRegion
 import enums
 
 router = APIRouter()
@@ -33,17 +33,13 @@ def get_food_history_last_weeks(request: Request,
                                 product_name: str,
                                 quality_val: int):
     curr_date = datetime.today()
+    week_num = curr_date.isocalendar()[1]
 
     pipeline = [
         {
             '$match': {
-                'date': {
-                    '$gte': (curr_date - timedelta(weeks=4)).replace(
-                        hour=0,
-                        minute=0,
-                        second=0,
-                        microsecond=0
-                    )
+                'week': {
+                    '$gte': week_num - 4
                 }
             }
         }, {
@@ -70,6 +66,7 @@ def get_food_history_last_weeks(request: Request,
         }, {
             '$project': {
                 'date': '$date',
+                'week': '$week',
                 'mean_price': '$mean_price',
             }
         }
@@ -338,3 +335,96 @@ def get_foods_in_zone(request: Request,
         return result[0]
     raise HTTPException(status_code=404)
 
+
+@router.get(
+    "/product/{product_name}/year/{year_val}/",
+    response_description="---.",
+    response_model=List[MeanPriceInRegion])
+def testtt(request: Request,
+           product_name: str,
+           year_val: int,
+           week_from: Annotated[int | None, Query(alias="week_gte")] = None,
+           week_to: Annotated[int | None, Query(alias="week_lte")] = None,
+           quality_val: Annotated[int | None, Query(alias="quality")] = None,
+           store_type_id: Annotated[int | None, Query(alias="store")] = None,
+           ):
+    curr_date = datetime.today()
+    week_num = curr_date.isocalendar()[1]
+    pipeline = []
+    pipeline.append(
+        {
+            '$match': {
+                'week': {
+                    '$gte': week_num - 4
+                },
+                'year': year_val
+            }
+        } if week_from is None and week_to is None else {
+            '$match': {
+                'week': {
+                    '$gte': week_from,
+                    '$lte': week_to
+                },
+                'year': year_val
+            }
+        })
+    if store_type_id is not None:
+        pipeline.append(
+            {
+                '$match': {
+                    'point_type': enums.point_dict[store_type_id].value,
+                }
+            })
+
+    if quality_val is not None:
+        pipeline.append(
+            {
+                '$match': {
+                    'quality': enums.quality_dict[quality_val]
+                }
+            })
+
+    pipeline.extend([{
+        '$lookup': {
+            'from': 'foods',
+            'localField': 'food_id',
+            'foreignField': '_id',
+            'as': 'food'
+        }
+    }, {
+        '$unwind': {
+            'path': '$food',
+            'preserveNullAndEmptyArrays': False
+        }
+    }, {
+        '$match': {
+            'food.product_name': product_name
+        }
+    }, {
+        '$group': {
+            '_id': {
+                'region': '$region',
+                'week': '$week',
+                'date': '$date'
+            },
+            'mean_price': {
+                '$avg': '$mean_price'
+            }
+        }
+    }, {
+        '$project': {
+            '_id': 0,
+            'region': '$_id.region',
+            'week': '$_id.week',
+            'date': '$_id.date',
+            'mean_price': '$mean_price'
+        }
+    }])
+
+    print(pipeline)
+    result = request.app.database['history'].aggregate(pipeline)
+
+    if result is not None:
+        result = list(result)
+        return result
+    raise HTTPException(status_code=404)

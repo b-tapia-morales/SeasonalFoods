@@ -55,3 +55,10 @@ class SeasonalFoodSeries(BaseModel):
     name: str
     category: str
     series: List[FoodWeekAndPrice]
+
+
+class MeanPriceInRegion(BaseModel):
+    region: str
+    date: date
+    week: int
+    mean_price: float
