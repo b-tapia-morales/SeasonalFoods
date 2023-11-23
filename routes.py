@@ -34,6 +34,7 @@ def get_food_history_last_weeks(request: Request,
                                 quality_val: int):
     curr_date = datetime.today()
     week_num = curr_date.isocalendar()[1]
+    print(week_num)
 
     pipeline = [
         {
@@ -76,7 +77,9 @@ def get_food_history_last_weeks(request: Request,
     result = request.app.database['history'].aggregate(pipeline)
 
     if result is not None:
-        return list(result)
+        result = list(result)
+        result = sorted(result, key=lambda x: x['week'], reverse=True)
+        return result
     raise HTTPException(status_code=404)
 
 
@@ -138,7 +141,9 @@ def get_food_history_week_range(request: Request,
     result = request.app.database['history'].aggregate(pipeline)
 
     if result is not None:
-        return list(result)
+        result = list(result)
+        result = sorted(result, key=lambda x: x['week'], reverse=True)
+        return result
     raise HTTPException(status_code=404)
 
 
@@ -196,7 +201,9 @@ def get_food_history_date_range(request: Request,
     result = request.app.database['history'].aggregate(pipeline)
 
     if result is not None:
-        return list(result)
+        result = list(result)
+        result = sorted(result, key=lambda x: x['week'], reverse=True)
+        return result
     raise HTTPException(status_code=404)
 
 
@@ -278,7 +285,7 @@ def get_foods_in_season(request: Request,
     if result is not None:
         result = list(result)
         for item in result:
-            item['series'] = sorted(item['series'], key=lambda x: x['week'])
+            item['series'] = sorted(item['series'], key=lambda x: x['week'], reverse=True)
         return result
     raise HTTPException(status_code=404)
 
@@ -425,5 +432,6 @@ def testtt(request: Request,
 
     if result is not None:
         result = list(result)
+        result = sorted(result, key=lambda x: x['week'], reverse=True)
         return result
     raise HTTPException(status_code=404)
