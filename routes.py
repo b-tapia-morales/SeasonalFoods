@@ -34,6 +34,7 @@ def get_food_history_last_weeks(request: Request,
                                 quality_val: int):
     curr_date = datetime.today()
     week_num = curr_date.isocalendar()[1]
+    print(week_num)
 
     pipeline = [
         {
@@ -76,7 +77,9 @@ def get_food_history_last_weeks(request: Request,
     result = request.app.database['history'].aggregate(pipeline)
 
     if result is not None:
-        return list(result)
+        result = list(result)
+        result = sorted(result, key=lambda x: x['week'], reverse=True)
+        return result
     raise HTTPException(status_code=404)
 
 
@@ -138,7 +141,9 @@ def get_food_history_week_range(request: Request,
     result = request.app.database['history'].aggregate(pipeline)
 
     if result is not None:
-        return list(result)
+        result = list(result)
+        result = sorted(result, key=lambda x: x['week'], reverse=True)
+        return result
     raise HTTPException(status_code=404)
 
 
@@ -196,11 +201,12 @@ def get_food_history_date_range(request: Request,
     result = request.app.database['history'].aggregate(pipeline)
 
     if result is not None:
-        return list(result)
+        result = list(result)
+        result = sorted(result, key=lambda x: x['week'], reverse=True)
+        return result
     raise HTTPException(status_code=404)
 
 
-# you probably shouldn't use this right now.
 @router.get(
     "/seasonal/month/{month_val}/region/{region_id}",
     response_description="Foods that are in season.",
@@ -279,14 +285,14 @@ def get_foods_in_season(request: Request,
     if result is not None:
         result = list(result)
         for item in result:
-            item['series'] = sorted(item['series'], key=lambda x: x['week'])
+            item['series'] = sorted(item['series'], key=lambda x: x['week'], reverse=True)
         return result
     raise HTTPException(status_code=404)
 
 
 @router.get(
     "/seasonal/zone/{zone_id}/harvest_months",
-    response_description="Foods in a certain zone and/or during harvest.",
+    response_description="Foods in a certain zone and during harvest.",
     response_model=HarvestFoods)
 def get_foods_in_zone(request: Request,
                       zone: enums.Zone,
@@ -300,7 +306,7 @@ def get_foods_in_zone(request: Request,
             '$lookup': {
                 'from': 'foods',
                 'localField': 'ingredient_id',
-                'foreignField': '_id',
+                'foreignField': 'product_name',
                 'as': 'food'
             }
         }, {
@@ -426,5 +432,6 @@ def testtt(request: Request,
 
     if result is not None:
         result = list(result)
+        result = sorted(result, key=lambda x: x['week'], reverse=True)
         return result
     raise HTTPException(status_code=404)

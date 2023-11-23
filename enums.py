@@ -15,9 +15,9 @@ class Region(Enum):
 
 
 class Zone(Enum):
-    NORTE = "Zona norte"
-    CENTRO = "Zona centro"
-    SUR = "Zona sur"
+    NORTE = "Zona Norte"
+    CENTRO = "Zona Centro"
+    SUR = "Zona Sur"
 
 
 class Category(Enum):
@@ -40,15 +40,15 @@ class BoughtIn(Enum):
 
 
 region_zone_dict: dict[str, str] = {
-    "Región de Arica y Parinacota": "Zona norte",
-    "Región de Coquimbo": "Zona centro",
-    "Región de Valparaíso": "Zona centro",
-    "Región Metropolitana de Santiago": "Zona centro",
-    "Región del Maule": "Zona centro",
-    "Región de Ñuble": "Zona centro",
-    "Región del Biobío": "Zona centro",
-    "Región de La Araucanía": "Zona sur",
-    "Región de Los Lagos": "Zona sur",
+    "Región de Arica y Parinacota": "Zona Norte",
+    "Región de Coquimbo": "Zona Centro",
+    "Región de Valparaíso": "Zona Centro",
+    "Región Metropolitana de Santiago": "Zona Centro",
+    "Región del Maule": "Zona Centro",
+    "Región de Ñuble": "Zona Centro",
+    "Región del Biobío": "Zona Centro",
+    "Región de La Araucanía": "Zona Sur",
+    "Región de Los Lagos": "Zona Sur",
 }
 
 
