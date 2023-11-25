@@ -8,8 +8,9 @@ from datetime import datetime, date
 
 
 class Food(BaseModel):
-    product_name: str
-    group: str
+    name: str
+    category: str
+    price: float
 
 
 class HarvestFoods(BaseModel):

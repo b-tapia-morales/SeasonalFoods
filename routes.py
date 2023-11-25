@@ -5,6 +5,7 @@ from fastapi.encoders import jsonable_encoder
 from typing import List, Annotated
 
 import models
+import pipeline_utils
 from models import Food, FoodDateAndPrice, SeasonalFoodSeries, HarvestFoods, MeanPriceInRegion
 import enums
 
@@ -16,12 +17,139 @@ def get_foods(request: Request):
     return request.app.database["foods"].find()
 
 
-@router.get("/{product_name}", response_description="Get a certain food", response_model=Food)
-def get_food(request: Request, product_name: str):
-    item = request.app.database["foods"].find_one({"product_name": product_name})
-    print(item)
-    if item is not None:
-        return item
+@router.get("/foods_search/year/{year_val}/",
+            response_description="Food list by specified parameters.",
+            response_model=List[Food])
+def advanced_food_search(request: Request,
+                         year_val: int,
+                         region_id: Annotated[int | None, Query(alias='region')] = None,
+                         group_id: Annotated[int | None, Query(alias='category')] = None,
+                         week_from: Annotated[int | None, Query(alias="week_gte")] = None,
+                         week_to: Annotated[int | None, Query(alias="week_lte")] = None,
+                         quality_val: Annotated[int | None, Query(alias="quality")] = None,
+                         store_type_id: Annotated[int | None, Query(alias="store")] = None,
+                         ):
+    pipeline = pipeline_utils.generate_history_pipeline(year_val=year_val,
+                                                        region_id=region_id,
+                                                        quality_val=quality_val,
+                                                        store_id=store_type_id,
+                                                        week_from=week_from,
+                                                        week_to=week_to)
+    pipeline.extend([
+        {
+            '$lookup': {
+                'from': 'foods',
+                'localField': 'food_id',
+                'foreignField': '_id',
+                'as': 'food'
+            }
+        }, {
+            '$unwind': {
+                'path': '$food',
+                'preserveNullAndEmptyArrays': False
+            }
+        }
+    ])
+    if group_id is not None:
+        pipeline.append(
+            {
+                '$match': {
+                    'food.group': enums.category_dict[group_id].value
+                }
+            })
+    pipeline.extend([
+        {
+            '$group': {
+                '_id': {
+                    'name': '$food.product_name',
+                    'group': '$food.group',
+                    'week': {
+                        '$week': '$date'
+                    },
+                    'date': '$date'
+                },
+                'mean_price': {
+                    '$avg': '$mean_price'
+                }
+            }
+        }, {
+            '$group': {
+                '_id': {
+                    'name': '$_id.name',
+                    'category': '$_id.group'
+                },
+                'series': {
+                    '$push': {
+                        'week': '$_id.week',
+                        'date': '$_id.date',
+                        'mean_price': '$mean_price'
+                    }
+                }
+            }
+        }, {
+            '$project': {
+                '_id': 0,
+                'name': '$_id.name',
+                'category': '$_id.category',
+                'price': {
+                    '$avg': '$series.mean_price'
+                }
+            }
+        }
+    ])
+
+    result = request.app.database['history'].aggregate(pipeline)
+    if result is not None:
+        result = list(result)
+        return result
+    raise HTTPException(status_code=404)
+
+
+@router.get("year/{year_val/product/{product_name}/",
+            response_description="Product's price history from the last 4 weeks.",
+            response_model=List[FoodDateAndPrice])
+def get_food_history(request: Request,
+                     year_val: int,
+                     product_name: str,
+                     region_id: Annotated[int | None, Query(alias='region')] = None,
+                     week_from: Annotated[int | None, Query(alias="week_gte")] = None,
+                     week_to: Annotated[int | None, Query(alias="week_lte")] = None,
+                     quality_val: Annotated[int | None, Query(alias="quality")] = None,
+                     store_type_id: Annotated[int | None, Query(alias="store")] = None):
+    pipeline = pipeline_utils.generate_history_pipeline(year_val=year_val,
+                                                        region_id=region_id,
+                                                        quality_val=quality_val,
+                                                        store_id=store_type_id,
+                                                        week_from=week_from,
+                                                        week_to=week_to)
+    pipeline.extend([{
+        '$lookup': {
+            'from': 'foods',
+            'localField': 'food_id',
+            'foreignField': '_id',
+            'as': 'food'
+        }
+    }, {
+        '$unwind': {
+            'path': '$food',
+            'preserveNullAndEmptyArrays': False
+        }
+    }, {
+        '$match': {
+            'food.product_name': product_name
+        }
+    }, {
+        '$project': {
+            'date': '$date',
+            'week': '$week',
+            'mean_price': '$mean_price',
+        }
+    }
+    ])
+
+    result = request.app.database['history'].aggregate(pipeline)
+    if result is not None:
+        return list(result)
     raise HTTPException(status_code=404)
 
 
@@ -83,6 +211,7 @@ def get_food_history_last_weeks(request: Request,
     raise HTTPException(status_code=404)
 
 
+"""
 @router.get(
     "/product/{product_name}/quality/{quality_val}/region/{region_id}/store_type/{store_type_id}/year/{year_val}/week",
     response_description="Product's price history using weeks from a certain year.",
@@ -205,6 +334,7 @@ def get_food_history_date_range(request: Request,
         result = sorted(result, key=lambda x: x['week'], reverse=True)
         return result
     raise HTTPException(status_code=404)
+"""
 
 
 @router.get(
@@ -217,7 +347,8 @@ def get_foods_in_season(request: Request,
     current_date = datetime.today()
     date_lower = datetime(current_date.year, month_val, 1, 0, 0, 0)
     date_upper = datetime(current_date.year, month_val + 1, 1, 0, 0, 0) - timedelta(days=1)
-
+    region = enums.region_dict[region_id].value
+    zone = enums.region_zone_dict[region]
     pipeline = [
         {
             '$match': {
@@ -228,7 +359,7 @@ def get_foods_in_season(request: Request,
             }
         }, {
             '$match': {
-                'region': enums.region_dict[region_id].value
+                'region': region
             }
         }, {
             '$lookup': {
@@ -269,6 +400,23 @@ def get_foods_in_season(request: Request,
                         'mean_price': '$mean_price'
                     }
                 }
+            }
+        }, {
+            '$lookup': {
+                'from': 'harvest',
+                'localField': '_id.name',
+                'foreignField': 'ingredient_id',
+                'as': 'harvest'
+            }
+        }, {
+            '$unwind': {
+                'path': '$harvest',
+                'preserveNullAndEmptyArrays': False
+            }
+        }, {
+            '$match': {
+                'harvest.zone': zone,
+                'harvest.harvest_months': month_val
             }
         }, {
             '$project': {
@@ -354,42 +502,12 @@ def testtt(request: Request,
            quality_val: Annotated[int | None, Query(alias="quality")] = None,
            store_type_id: Annotated[int | None, Query(alias="store")] = None,
            ):
-    curr_date = datetime.today()
-    week_num = curr_date.isocalendar()[1]
-    pipeline = []
-    pipeline.append(
-        {
-            '$match': {
-                'week': {
-                    '$gte': week_num - 4
-                },
-                'year': year_val
-            }
-        } if week_from is None and week_to is None else {
-            '$match': {
-                'week': {
-                    '$gte': week_from,
-                    '$lte': week_to
-                },
-                'year': year_val
-            }
-        })
-    if store_type_id is not None:
-        pipeline.append(
-            {
-                '$match': {
-                    'point_type': enums.point_dict[store_type_id].value,
-                }
-            })
-
-    if quality_val is not None:
-        pipeline.append(
-            {
-                '$match': {
-                    'quality': enums.quality_dict[quality_val]
-                }
-            })
-
+    pipeline = pipeline_utils.generate_history_pipeline(year_val=year_val,
+                                                        region_id=None,
+                                                        quality_val=quality_val,
+                                                        store_id=store_type_id,
+                                                        week_from=week_from,
+                                                        week_to=week_to)
     pipeline.extend([{
         '$lookup': {
             'from': 'foods',
