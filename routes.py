@@ -217,7 +217,8 @@ def get_foods_in_season(request: Request,
     current_date = datetime.today()
     date_lower = datetime(current_date.year, month_val, 1, 0, 0, 0)
     date_upper = datetime(current_date.year, month_val + 1, 1, 0, 0, 0) - timedelta(days=1)
-
+    region = enums.region_dict[region_id].value
+    zone = enums.region_zone_dict[region]
     pipeline = [
         {
             '$match': {
@@ -228,7 +229,7 @@ def get_foods_in_season(request: Request,
             }
         }, {
             '$match': {
-                'region': enums.region_dict[region_id].value
+                'region': region
             }
         }, {
             '$lookup': {
@@ -269,6 +270,23 @@ def get_foods_in_season(request: Request,
                         'mean_price': '$mean_price'
                     }
                 }
+            }
+        }, {
+            '$lookup': {
+                'from': 'harvest',
+                'localField': '_id.name',
+                'foreignField': 'ingredient_id',
+                'as': 'harvest'
+            }
+        }, {
+            '$unwind': {
+                'path': '$harvest',
+                'preserveNullAndEmptyArrays': False
+            }
+        }, {
+            '$match': {
+                'harvest.zone': zone,
+                'harvest.harvest_months': month_val
             }
         }, {
             '$project': {
