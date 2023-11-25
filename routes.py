@@ -17,7 +17,7 @@ def get_foods(request: Request):
     return request.app.database["foods"].find()
 
 
-@router.get("foods_search/year/{year_val}/",
+@router.get("/foods_search/year/{year_val}/",
             response_description="Food list by specified parameters.",
             response_model=List[Food])
 def advanced_food_search(request: Request,
