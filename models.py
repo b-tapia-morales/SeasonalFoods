@@ -36,11 +36,8 @@ class FoodDateAndPrice(BaseModel):
     date: date
     week: int
     mean_price: float
-
-
-class FoodWeekAndPrice(BaseModel):
-    week: int
-    mean_price: float
+    min_price: int
+    max_price: int
 
 
 class FoodSummarized(BaseModel):

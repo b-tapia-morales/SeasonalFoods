@@ -63,9 +63,7 @@ def advanced_food_search(request: Request,
                 '_id': {
                     'name': '$food.product_name',
                     'group': '$food.group',
-                    'week': {
-                        '$week': '$date'
-                    },
+                    'week': '$week',
                     'date': '$date'
                 },
                 'mean_price': {
@@ -82,7 +80,7 @@ def advanced_food_search(request: Request,
                     '$push': {
                         'week': '$_id.week',
                         'date': '$_id.date',
-                        'mean_price': '$mean_price'
+                        'mean_price': '$mean_price',
                     }
                 }
             }
@@ -105,7 +103,7 @@ def advanced_food_search(request: Request,
     raise HTTPException(status_code=404)
 
 
-@router.get("year/{year_val/product/{product_name}/",
+@router.get("/year/{year_val}/product/{product_name}/",
             response_description="Product's price history from the last 4 weeks.",
             response_model=List[FoodDateAndPrice])
 def get_food_history(request: Request,
@@ -143,6 +141,8 @@ def get_food_history(request: Request,
             'date': '$date',
             'week': '$week',
             'mean_price': '$mean_price',
+            'min_price': '$min_price',
+            'max_price': '$max_price'
         }
     }
     ])
@@ -197,6 +197,8 @@ def get_food_history_last_weeks(request: Request,
                 'date': '$date',
                 'week': '$week',
                 'mean_price': '$mean_price',
+                'min_price': '$min_price',
+                'max_price': '$max_price',
             }
         }
     ]
@@ -209,132 +211,6 @@ def get_food_history_last_weeks(request: Request,
         result = sorted(result, key=lambda x: x['week'], reverse=True)
         return result
     raise HTTPException(status_code=404)
-
-
-"""
-@router.get(
-    "/product/{product_name}/quality/{quality_val}/region/{region_id}/store_type/{store_type_id}/year/{year_val}/week",
-    response_description="Product's price history using weeks from a certain year.",
-    response_model=List[FoodDateAndPrice])
-def get_food_history_week_range(request: Request,
-                                product_name: str,
-                                quality_val: int,
-                                region_id: int,
-                                store_type_id: int,
-                                year_val: int,
-                                week_from: Annotated[int, Query(alias="gte")],
-                                week_to: Annotated[int, Query(alias="lte")]):
-    dt_lower = date.fromisocalendar(year_val, week_from, 1)
-    dt_upper = date.fromisocalendar(year_val, week_to, 1)
-
-    pipeline = [
-        {
-            '$match': {
-                'date': {
-                    '$gte': datetime.combine(dt_lower, datetime.min.time()),
-                    '$lte': datetime.combine(dt_upper, datetime.min.time())
-                }
-            }
-        }, {
-            '$match': {
-                'region': enums.region_dict[region_id].value,
-                'quality': enums.quality_dict[quality_val],
-                'point_type': enums.point_dict[store_type_id].value
-            }
-        }, {
-            '$lookup': {
-                'from': 'foods',
-                'localField': 'food_id',
-                'foreignField': '_id',
-                'as': 'food'
-            }
-        }, {
-            '$unwind': {
-                'path': '$food',
-                'preserveNullAndEmptyArrays': False
-            }
-        }, {
-            '$match': {
-                'food.product_name': product_name
-            }
-        }, {
-            '$project': {
-                'date': '$date',
-                'week': '$week',
-                'mean_price': '$mean_price',
-            }
-        }
-    ]
-
-    print(pipeline)
-    result = request.app.database['history'].aggregate(pipeline)
-
-    if result is not None:
-        result = list(result)
-        result = sorted(result, key=lambda x: x['week'], reverse=True)
-        return result
-    raise HTTPException(status_code=404)
-
-
-@router.get(
-    "/product/{product_name}/quality/{quality_val}/region/{region_id}/store_type/{store_type_id}/date",
-    response_description="Product's price history using dates.",
-    response_model=List[FoodDateAndPrice])
-def get_food_history_date_range(request: Request,
-                                product_name: str,
-                                quality_val: int,
-                                region_id: int,
-                                store_type_id: int,
-                                date_from: Annotated[str, Query(alias="gte")],
-                                date_to: Annotated[str, Query(alias="lte")]):
-    pipeline = [
-        {
-            '$match': {
-                'date': {
-                    '$gte': datetime.strptime(date_from, '%Y-%m-%d'),
-                    '$lte': datetime.strptime(date_to, '%Y-%m-%d')
-                }
-            }
-        }, {
-            '$match': {
-                'region': enums.region_dict[region_id].value,
-                'quality': enums.quality_dict[quality_val],
-                'point_type': enums.point_dict[store_type_id].value
-            }
-        }, {
-            '$lookup': {
-                'from': 'foods',
-                'localField': 'food_id',
-                'foreignField': '_id',
-                'as': 'food'
-            }
-        }, {
-            '$unwind': {
-                'path': '$food',
-                'preserveNullAndEmptyArrays': False
-            }
-        }, {
-            '$match': {
-                'food.product_name': product_name
-            }
-        }, {
-            '$project': {
-                'date': '$date',
-                'week': '$week',
-                'mean_price': '$mean_price',
-            }
-        }
-    ]
-
-    print(pipeline)
-    result = request.app.database['history'].aggregate(pipeline)
-
-    if result is not None:
-        result = list(result)
-        result = sorted(result, key=lambda x: x['week'], reverse=True)
-        return result
-    raise HTTPException(status_code=404)
-"""
 
 
 @router.get(
@@ -353,8 +229,8 @@ def get_foods_in_season(request: Request,
         {
             '$match': {
                 'date': {
-                    '$gte': date_lower,
-                    '$lte': date_upper
+                    '$gte': datetime(2023, 10, 1, 0, 0, 0, tzinfo=timezone.utc),
+                    '$lte': datetime(2023, 10, 31, 0, 0, 0, tzinfo=timezone.utc)
                 }
             }
         }, {
@@ -383,8 +259,14 @@ def get_foods_in_season(request: Request,
                     },
                     'date': '$date'
                 },
+                'min_price': {
+                    '$min': '$min_price'
+                },
                 'mean_price': {
                     '$avg': '$mean_price'
+                },
+                'max_price': {
+                    '$max': '$max_price'
                 }
             }
         }, {
@@ -397,7 +279,9 @@ def get_foods_in_season(request: Request,
                     '$push': {
                         'week': '$_id.week',
                         'date': '$_id.date',
-                        'mean_price': '$mean_price'
+                        'min_price': '$min_price',
+                        'mean_price': '$mean_price',
+                        'max_price': '$max_price'
                     }
                 }
             }
@@ -533,7 +417,13 @@ def testtt(request: Request,
             },
             'mean_price': {
                 '$avg': '$mean_price'
-            }
+            },
+            'min_price': {
+                '$min': '$min_price'
+            },
+            'max_price': {
+                '$max': '$max_price'
+            },
         }
     }, {
         '$project': {
@@ -541,7 +431,9 @@ def testtt(request: Request,
             'region': '$_id.region',
             'week': '$_id.week',
             'date': '$_id.date',
-            'mean_price': '$mean_price'
+            'mean_price': '$mean_price',
+            'min_price': '$min_price',
+            'max_price': '$max_price'
         }
     }])
 
