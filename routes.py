@@ -137,15 +137,31 @@ def get_food_history(request: Request,
             'food.product_name': product_name
         }
     }, {
+        '$group': {
+            '_id': {
+                'week': '$week',
+                'date': '$date'
+            },
+            'mean_price': {
+                '$avg': '$mean_price'
+            },
+            'min_price': {
+                '$min': '$min_price'
+            },
+            'max_price': {
+                '$max': '$max_price'
+            },
+        }
+    }, {
         '$project': {
-            'date': '$date',
-            'week': '$week',
+            '_id': 0,
+            'week': '$_id.week',
+            'date': '$_id.date',
             'mean_price': '$mean_price',
             'min_price': '$min_price',
             'max_price': '$max_price'
         }
-    }
-    ])
+    }])
 
     result = request.app.database['history'].aggregate(pipeline)
     if result is not None:
