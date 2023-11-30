@@ -49,14 +49,15 @@ class FoodSummarized(BaseModel):
     date: datetime
 
 
-class SeasonalFoodSeries(BaseModel):
+class FoodSeries(BaseModel):
     name: str
-    category: str
-    series: List[FoodDateAndPrice]
-
-
-class MeanPriceInRegion(BaseModel):
     region: str
-    date: date
-    week: int
-    mean_price: float
+    point_type: str
+    quality: str
+    history: List[FoodDateAndPrice]
+
+
+class FoodPricesInRegion(BaseModel):
+    region: str
+    quality: str
+    history: List[FoodDateAndPrice]
