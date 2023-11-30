@@ -63,6 +63,9 @@ def advanced_food_search(request: Request,
                 '_id': {
                     'name': '$food.product_name',
                     'group': '$food.group',
+                    'region': '$region',
+                    'quality': '$quality',
+                    'point_type': '$point_type',
                     'week': '$week',
                     'date': '$date'
                 },
@@ -74,6 +77,9 @@ def advanced_food_search(request: Request,
             '$group': {
                 '_id': {
                     'name': '$_id.name',
+                    'region': '$_id.region',
+                    'quality': '$_id.quality',
+                    'point_type': '$_id.point_type',
                     'category': '$_id.group'
                 },
                 'series': {
@@ -89,6 +95,9 @@ def advanced_food_search(request: Request,
                 '_id': 0,
                 'name': '$_id.name',
                 'category': '$_id.category',
+                'quality': '$_id.quality',
+                'point_type': '$_id.point_type',
+                'region': '$_id.region',
                 'price': {
                     '$avg': '$series.mean_price'
                 }

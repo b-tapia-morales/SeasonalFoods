@@ -10,6 +10,9 @@ from datetime import datetime, date
 class Food(BaseModel):
     name: str
     category: str
+    quality: str
+    point_type: str
+    region: str
     price: float
 
 
