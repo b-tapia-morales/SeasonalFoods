@@ -28,13 +28,15 @@ def advanced_food_search(request: Request,
                          week_to: Annotated[int | None, Query(alias="week_lte")] = None,
                          quality_val: Annotated[int | None, Query(alias="quality")] = None,
                          store_type_id: Annotated[int | None, Query(alias="store")] = None,
+                         unit_id: Annotated[int | None, Query(alias='unit_metric')] = None,
                          in_season: Annotated[bool | None, Query(alias='in_season')] = None):
     pipeline = pipeline_utils.generate_history_pipeline(year_val=year_val,
                                                         region_id=region_id,
                                                         quality_val=quality_val,
                                                         store_id=store_type_id,
                                                         week_from=week_from,
-                                                        week_to=week_to)
+                                                        week_to=week_to,
+                                                        unit_id=unit_id)
     pipeline.extend([
         {
             '$lookup': {
@@ -66,6 +68,7 @@ def advanced_food_search(request: Request,
                     'region': '$region',
                     'quality': '$quality',
                     'point_type': '$point_type',
+                    'unit': '$unit',
                     'week': '$week',
                     'date': '$date'
                 },
@@ -80,7 +83,8 @@ def advanced_food_search(request: Request,
                     'region': '$_id.region',
                     'quality': '$_id.quality',
                     'point_type': '$_id.point_type',
-                    'category': '$_id.group'
+                    'category': '$_id.group',
+                    'unit': '$_id.unit'
                 },
                 'series': {
                     '$push': {
@@ -98,6 +102,7 @@ def advanced_food_search(request: Request,
                 'quality': '$_id.quality',
                 'point_type': '$_id.point_type',
                 'region': '$_id.region',
+                'unit': '$_id.unit',
                 'price': {
                     '$avg': '$series.mean_price'
                 }
@@ -130,7 +135,11 @@ def advanced_food_search(request: Request,
             }, {
                 '$project': {
                     'name': '$name',
+                    'region': '$region',
+                    'quality': '$quality',
+                    'point_type': '$point_type',
                     'category': '$category',
+                    'unit': '$unit',
                     'price': '$price'
                 }
             }
@@ -143,19 +152,22 @@ def advanced_food_search(request: Request,
     raise HTTPException(status_code=404)
 
 
-@router.get("/product/{product_name}/quality/{quality_val}/region/{region_id}",
+@router.get("/product/{product_name}/",
             response_description="Product's price history from the last 4 weeks.",
             response_model=List[FoodSeries])
 def get_food_history_last_weeks(request: Request,
-                                region_id: int,
                                 product_name: str,
-                                quality_val: int):
+                                region_id: Annotated[int | None, Query(alias='region')] = None,
+                                quality_val: Annotated[int | None, Query(alias="quality")] = None,
+                                store_type_id: Annotated[int | None, Query(alias="store")] = None,
+                                unit_id: Annotated[int | None, Query(alias='unit_metric')] = None):
     pipeline = pipeline_utils.generate_history_pipeline(year_val=datetime.now().year,
                                                         region_id=region_id,
                                                         quality_val=quality_val,
-                                                        store_id=None,
+                                                        store_id=store_type_id,
                                                         week_from=None,
-                                                        week_to=None)
+                                                        week_to=None,
+                                                        unit_id=unit_id)
 
     pipeline.extend([
         {
@@ -181,6 +193,7 @@ def get_food_history_last_weeks(request: Request,
                     'category': '$food.group',
                     'region': '$region',
                     'point_type': '$point_type',
+                    'unit': '$unit',
                     'quality': '$quality',
                     'week': '$week',
                     'date': '$date'
@@ -202,6 +215,7 @@ def get_food_history_last_weeks(request: Request,
                     'category': '$_id.group',
                     'region': '$_id.region',
                     'point_type': '$_id.point_type',
+                    'unit': '$_id.unit',
                     'quality': '$_id.quality'
                 },
                 'series': {
@@ -221,6 +235,7 @@ def get_food_history_last_weeks(request: Request,
                 'category': '$_id.group',
                 'region': '$_id.region',
                 'point_type': '$_id.point_type',
+                'unit': '$_id.unit',
                 'quality': '$_id.quality',
                 'history': '$series'
             }
@@ -238,21 +253,21 @@ def get_food_history_last_weeks(request: Request,
 
 
 @router.get(
-    "/product/{product_name}/quality/{quality_val}",
+    "/per_region/product/{product_name}/",
     response_description="---.",
     response_model=List[FoodPricesInRegion])
 def testtt(request: Request,
            product_name: str,
-           quality_val: int,
-           week_from: Annotated[int | None, Query(alias="week_gte")] = None,
-           week_to: Annotated[int | None, Query(alias="week_lte")] = None,
-           ):
+           quality_val: Annotated[int | None, Query(alias="quality")] = None,
+           store_type_id: Annotated[int | None, Query(alias="store")] = None,
+           unit_id: Annotated[int | None, Query(alias='unit_metric')] = None):
     pipeline = pipeline_utils.generate_history_pipeline(year_val=datetime.now().year,
                                                         region_id=None,
                                                         quality_val=quality_val,
-                                                        store_id=None,
-                                                        week_from=week_from,
-                                                        week_to=week_to)
+                                                        store_id=store_type_id,
+                                                        week_from=None,
+                                                        week_to=None,
+                                                        unit_id=unit_id)
     pipeline.extend([
         {
             '$lookup': {
@@ -278,6 +293,7 @@ def testtt(request: Request,
                     'region': '$region',
                     'point_type': '$point_type',
                     'quality': '$quality',
+                    'unit': '$unit',
                     'week': '$week',
                     'date': '$date'
                 },
@@ -297,7 +313,8 @@ def testtt(request: Request,
                     'name': '$_id.name',
                     'category': '$_id.group',
                     'region': '$_id.region',
-                    'quality': '$_id.quality'
+                    'quality': '$_id.quality',
+                    'unit': '$_id.unit'
                 },
                 'series': {
                     '$push': {
@@ -314,6 +331,7 @@ def testtt(request: Request,
                 '_id': 0,
                 'region': '$_id.region',
                 'quality': '$_id.quality',
+                'unit': '$_id.unit',
                 'history': '$series'
             }
         }
@@ -553,4 +571,3 @@ def get_foods_in_zone(request: Request,
         result = list(result)
         return result[0]
     raise HTTPException(status_code=404)
-

@@ -12,6 +12,7 @@ class Food(BaseModel):
     category: str
     quality: str
     point_type: str
+    unit: str
     region: str
     price: float
 
@@ -57,10 +58,12 @@ class FoodSeries(BaseModel):
     region: str
     point_type: str
     quality: str
+    unit: str
     history: List[FoodDateAndPrice]
 
 
 class FoodPricesInRegion(BaseModel):
     region: str
     quality: str
+    unit: str
     history: List[FoodDateAndPrice]
