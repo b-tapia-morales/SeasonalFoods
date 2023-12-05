@@ -91,3 +91,24 @@ quality_dict = {
     1: 'Primera',
     2: 'Segunda'
 }
+
+
+unit_metric_dict = {
+    1: '$/kilo',
+    2: '$/bolsa 1 kilo',
+    3: '$/envase 1 kilo',
+    4: '$/pote 500 gramos',
+    5: '$/pan de 250 gramos',
+    6: '$/Caja de 1 Litro',
+    7: '$/bolsa 800 grs',
+    8: '$/bandeja 12 unidades',
+    9: '$/unidad',
+    10: '$/envase 400 gramos',
+    11: '$/botella 900 ml',
+    12: '$/kilo (en saco de 5 kilos)',
+    13: '$/kilo (en saco de 25 kilos)',
+    14: '$/kilo (en envase de 1 kilo)',
+    15: '$/bandeja 30 unidades',
+    16: '$/envase 125 gramos',
+    17: '$/litro'
+}

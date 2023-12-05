@@ -10,6 +10,10 @@ from datetime import datetime, date
 class Food(BaseModel):
     name: str
     category: str
+    quality: str
+    point_type: str
+    unit: str
+    region: str
     price: float
 
 
@@ -49,14 +53,17 @@ class FoodSummarized(BaseModel):
     date: datetime
 
 
-class SeasonalFoodSeries(BaseModel):
+class FoodSeries(BaseModel):
     name: str
-    category: str
-    series: List[FoodDateAndPrice]
-
-
-class MeanPriceInRegion(BaseModel):
     region: str
-    date: date
-    week: int
-    mean_price: float
+    point_type: str
+    quality: str
+    unit: str
+    history: List[FoodDateAndPrice]
+
+
+class FoodPricesInRegion(BaseModel):
+    region: str
+    quality: str
+    unit: str
+    history: List[FoodDateAndPrice]

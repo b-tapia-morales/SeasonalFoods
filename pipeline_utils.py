@@ -2,7 +2,7 @@ from datetime import datetime
 import enums
 
 
-def generate_history_pipeline(region_id, store_id, quality_val, year_val, week_from, week_to):
+def generate_history_pipeline(region_id, store_id, quality_val, year_val, unit_id, week_from, week_to):
     week_num = datetime.today().isocalendar()[1]
     pipeline = [{
                     '$match': {
@@ -43,5 +43,14 @@ def generate_history_pipeline(region_id, store_id, quality_val, year_val, week_f
                     'quality': enums.quality_dict[quality_val]
                 }
             })
+
+    if unit_id is not None:
+        pipeline.append(
+            {
+                '$match': {
+                    'unit':  enums.unit_metric_dict[unit_id]
+                }
+            })
+
 
     return pipeline
